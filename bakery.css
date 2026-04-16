@@ -29,30 +29,35 @@ background-color: inherit;
     height: 1000px;
     width: 1000px;
     margin: 20px auto 0px auto;
-    background-color: blue;
+    background-color: rgb(89, 136, 215);
     border: 1px solid red;
 }
 
 /* customer section*/
-.customer-box{
+.customer-area{
 height: 500px;
 width: 500px;
+
+}
+
+.customer-box{
+
 }
 
 /* treat section*/
-.treat-box{
+.treat-area{
 height: 500px;
 width: 500px;
 }
 
 .treat{
-width: 200px;
-height: 200px;
+width: 50px;
+height: 50px;
 border: 1px solid black;
 }
 
 /* ingredient section*/
-.ingredient-box{
+.ingredient-area{
 width: 500px;
 height: 500px;
 }

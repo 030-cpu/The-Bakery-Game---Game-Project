@@ -1,0 +1,58 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: rgb(210, 106, 122);
+}
+
+.heading{
+    border: 1px solid black;
+    text-align: center;
+    padding: 20px;
+    width: fit-content;
+    height: fit-content;
+    margin: 20px auto 0px auto;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: rgb(89, 136, 215);
+}
+
+#title{
+background-color: inherit;
+}
+
+#subtitle{
+background-color: inherit;
+}
+
+.container{
+    height: 1000px;
+    width: 1000px;
+    margin: 20px auto 0px auto;
+    background-color: blue;
+    border: 1px solid red;
+}
+
+/* customer section*/
+.customer-box{
+height: 500px;
+width: 500px;
+}
+
+/* treat section*/
+.treat-box{
+height: 500px;
+width: 500px;
+}
+
+.treat{
+width: 200px;
+height: 200px;
+border: 1px solid black;
+}
+
+/* ingredient section*/
+.ingredient-box{
+width: 500px;
+height: 500px;
+}

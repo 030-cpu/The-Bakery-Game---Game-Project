@@ -2,7 +2,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: rgb(210, 106, 122);
+}
+
+body{
+    background-color: rgb(225, 128, 143);
 }
 
 .heading{
@@ -14,7 +17,7 @@
     margin: 20px auto 0px auto;
     justify-content: center;
     border-radius: 10px;
-    background-color: rgb(89, 136, 215);
+    background-color: rgb(219, 96, 114);
 }
 
 #title{
@@ -26,38 +29,64 @@ background-color: inherit;
 }
 
 .container{
-    height: 1000px;
+    height: auto;
     width: 1000px;
     margin: 20px auto 0px auto;
-    background-color: rgb(89, 136, 215);
+    background-color: rgb(65, 117, 206);
     border: 1px solid red;
 }
 
 /* customer section*/
 .customer-area{
-height: 500px;
+text-align: center;
+margin: 20px auto 0px auto;
+padding: 1px;
+border-radius: 10px;
 width: 500px;
+background-color: rgb(26, 66, 134);
+}
 
+.sub-customer-area{
+    background-color: rgb(91, 139, 222);
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
 }
 
 .customer-box{
-
+width: 200px;
+height: 200px;
+border-radius: 10px;
+margin: 10px;
+padding: 10px;
+background-color: rgb(239, 150, 163);
 }
 
 /* treat section*/
 .treat-area{
-height: 500px;
-width: 500px;
+height: auto;
+margin: 10px;
+border-radius: 10px;
+background-color: rgb(26, 66, 134);
+border: 1px solid red;
+}
+
+.sub-treat-area {
+    background-color: rgb(91, 139, 222);
+    border-radius: 5px;
+    margin: 10px;
+    border: 1px solid green;
 }
 
 .treat{
-width: 50px;
-height: 50px;
+width: fit-content;
+height: fit-content;
+font-size: 100px;
 border: 1px solid black;
 }
 
 /* ingredient section*/
 .ingredient-area{
-width: 500px;
-height: 500px;
+/* width: 500px;
+height: 500px; */
 }

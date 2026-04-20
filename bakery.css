@@ -28,6 +28,12 @@ background-color: inherit;
 background-color: inherit;
 }
 
+.title-text{
+padding: 5px;
+font-size: 25px;
+text-align: center;
+}
+
 .container{
     height: auto;
     width: 1000px;
@@ -76,17 +82,49 @@ border: 1px solid red;
     border-radius: 5px;
     margin: 10px;
     border: 1px solid green;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.treat-box{
+margin: 10px;
+padding: 10px;
+background-color: rgb(239, 150, 163);
 }
 
 .treat{
-width: fit-content;
-height: fit-content;
-font-size: 100px;
-border: 1px solid black;
+    width: fit-content;
+    height: fit-content;
+    font-size: 100px;
+    border: 1px solid black;
 }
 
 /* ingredient section*/
+
+.ingredient{
+    width: fit-content;
+    height: fit-content;
+    font-size: 100px;
+    border: 1px solid black;
+}
+
 .ingredient-area{
-/* width: 500px;
-height: 500px; */
+    height: auto;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: rgb(26, 66, 134);
+    border: 1px solid red;
+}
+
+.sub-ingredient-area{
+    background-color: rgb(91, 139, 222);
+    border-radius: 5px;
+    margin: 10px;
+    border: 1px solid green;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }

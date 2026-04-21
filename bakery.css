@@ -9,44 +9,61 @@ body{
 }
 
 .heading{
-    border: 1px solid black;
     text-align: center;
-    padding: 20px;
+    padding: 10px;
     width: fit-content;
     height: fit-content;
     margin: 20px auto 0px auto;
     justify-content: center;
     border-radius: 10px;
+    color: rgb(247, 186, 195);
     background-color: rgb(219, 96, 114);
+    border: 5px solid rgb(207, 91, 108);
+
 }
 
 #title{
 background-color: inherit;
+font-family: "Cherry Bomb One", system-ui;
+font-style: normal;
+letter-spacing: 2.5px;
+font-size: 50px;
 }
+
 
 #subtitle{
 background-color: inherit;
+font-family: "Cherry Bomb One", system-ui;
+font-style: normal;
+letter-spacing: 2px;
+font-size: 20px;
 }
 
 .title-text{
 padding: 5px;
 font-size: 25px;
 text-align: center;
+font-family: "Cherry Bomb One", system-ui;
+font-style: normal;
+letter-spacing: 2px;
+color: rgb(146, 181, 241);
 }
 
 .container{
+    padding: 10px;
     height: auto;
-    width: 1000px;
-    margin: 20px auto 0px auto;
+    width: 1500px;
+    margin: 20px auto 20px auto;
+    border-radius: 5px;
     background-color: rgb(65, 117, 206);
-    border: 1px solid red;
+    border: 5px solid rgb(56, 98, 170);
 }
 
 /* customer section*/
 .customer-area{
 text-align: center;
 margin: 20px auto 0px auto;
-padding: 1px;
+padding: 10px;
 border-radius: 10px;
 width: 500px;
 background-color: rgb(26, 66, 134);
@@ -67,21 +84,21 @@ margin: 10px;
 padding: 10px;
 background-color: rgb(239, 150, 163);
 }
+/* task bar section*/
+
 
 /* treat section*/
 .treat-area{
-height: auto;
-margin: 10px;
+margin: 20px auto 20px auto;
 border-radius: 10px;
 background-color: rgb(26, 66, 134);
-border: 1px solid red;
 }
 
 .sub-treat-area {
     background-color: rgb(91, 139, 222);
     border-radius: 5px;
+    padding: 10px;
     margin: 10px;
-    border: 1px solid green;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -91,6 +108,7 @@ border: 1px solid red;
 .treat-box{
 margin: 10px;
 padding: 10px;
+border-radius: 5px;
 background-color: rgb(239, 150, 163);
 }
 
@@ -98,7 +116,34 @@ background-color: rgb(239, 150, 163);
     width: fit-content;
     height: fit-content;
     font-size: 100px;
-    border: 1px solid black;
+    margin: auto;
+    border-radius: 5px;
+    background-color: rgb(143, 177, 235);
+}
+
+.treat-name{
+    text-align: center;
+    font-size: 20px;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(247, 186, 195);
+    background-color: rgb(219, 96, 114);
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    letter-spacing: 2px;
+}
+
+.treat-button{
+    margin: 5px auto 5px auto;
+    padding: 5px;
+    font-size: 15px;
+    border-radius: 5px;
+    color: rgb(247, 186, 195);
+    background-color: rgb(219, 96, 114);
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    letter-spacing: 2px;
 }
 
 /* ingredient section*/
@@ -110,12 +155,18 @@ background-color: rgb(239, 150, 163);
     border: 1px solid black;
 }
 
+.ingredient-box{
+margin: 10px;
+padding: 10px;
+border-radius: 5px;
+background-color: rgb(239, 150, 163);
+};
+
 .ingredient-area{
-    height: auto;
+    height: fit-content;
     margin: 10px;
     border-radius: 10px;
     background-color: rgb(26, 66, 134);
-    border: 1px solid red;
 }
 
 .sub-ingredient-area{

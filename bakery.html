@@ -5,16 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> The Bakery game </title>
     <link rel="stylesheet" href="bakery.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Heading -->
     <div class="heading">
         <h1 id="title"> The Bakery </h1>
-        <p id="subtitle"> welcome to the bakery, bake treats to serve customers!</p>
+        <p id="subtitle"> Welcome to the bakery! Use ingredients to make treats for your customers! Use profit to expand your business!</p>
     </div>
 
     <div class="container">
-        <!-- Customer Area -->
+        <!-- Customer + Task Bar  Area -->
+         <div id="sub-container">
+
             <div class="customer-area">
                          <div class="title-text"> Customers </div>
                 <div class="sub-customer-area">
@@ -28,6 +33,17 @@
                 </div>
             </div>
 
+            <div class="task-area">
+                <div> Task Bar</div>
+                    <div class=sub-task-area>
+                        <div class="task-box">
+
+                        </div>
+                    </div>>
+                </div>
+            </div>
+            
+
         <!-- Treats Area -->
             <div class="treat-area">
                     <div class="title-text"> Treats </div>
@@ -36,63 +52,86 @@
                         <div class="treat">
                             🍬
                         </div>
-                        <div>Candy</div>
-                        <button>5$</button>
+                        <div class="treat-name">Candy</div>
+                        <button class="treat-button">5$</button>
                     </div>
 
                     <div class="treat-box">
                         <div class="treat">
                             🍭
                         </div>
-                        <div>Lolipop</div>
-                        <button>25$</button>
-                        
+                        <div class="treat-name">Lolipop</div>
+                        <button class="treat-button">25$</button>
                     </div>
 
                     <div class="treat-box">
                         <div class="treat">
                             🍫
                         </div>
-                        <div>Chocolate</div>
-                        <button>50$</button>
+                        <div class="treat-name">Chocolate</div>
+                        <button class="treat-button">50$</button>
                     </div>
 
                     <div class="treat-box">
                         <div class="treat">
                             🍪
                         </div>
-                        <div>Cookie</div>
-                        <button>100$</button>
+                        <div class="treat-name">Cookie</div>
+                        <button class="treat-button">100$</button>
                     </div>
 
                     <div class="treat-box">
                         <div class="treat">
                             🍰
                         </div>
-                        <div>Strawberry Shortcake</div>
-                        <button>250$</button>
+                        <div class="treat-name">Strawberry Shortcake</div>
+                        <button class="treat-button">250$</button>
                     </div>
 
                     <div class="treat-box">
                         <div class="treat">
                             🎂
                         </div>
-                        <div> Birthday Cake </div>
-                        <button>500$</button>
+                        <div class="treat-name">Birthday Cake</div>
+                        <button class="treat-button">500$</button>
                     </div>
                 </div>
             </div>
             
         <!-- Ingredients Area-->
             <div class="ingredient-area">
-                    <div class="title-text"> Ingredient </div>
+                    <div class="title-text"> Ingredients </div>
                 <div class="sub-ingredient-area">
-                        <div class="ingredient">🧈</div>
-                        <div class="ingredient">🥚</div>
-                        <div class="ingredient">🥛</div>
-                        <div class="ingredient"></div>
-                        <div class="ingredient">🍓</div>
-                        <div class="ingredient">🍽️</div>
+                    
+                    <div class="ingredient-box">
+                        <div class="ingredient">
+                        🧈
+                        </div>
+                    </div>
+
+                    <div class="ingredient-box">
+                        <div class="ingredient">
+                        🥚
+                        </div>
+                    </div>
+
+                    <div class="ingredient-box">
+                        <div class="ingredient">
+                        🥛
+                        </div>
+                    </div>
+
+                    <div class="ingredient-box">
+                        <div class="ingredient">
+                        🍓
+                        </div>
+                    </div>
+
+                    <div class="ingredient-box">
+                        <div class="ingredient">
+                        🍽️
+                        </div>
+                    </div>
                 </div>
             </div>
     </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> The Bakery game </title>
+    <title> The Bakery Game </title>
     <link rel="stylesheet" href="bakery.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +17,8 @@
     </div>
 
     <div class="container">
-        <!-- Customer + Task Bar  Area -->
-         <div id="sub-container">
+        <!-- Customer + Navigation  Area -->
+         <div class="sub-container">
 
             <div class="customer-area">
                          <div class="title-text"> Customers </div>
@@ -34,14 +34,25 @@
             </div>
 
             <div class="task-area">
-                <div> Task Bar</div>
+                <div class="title-text"> Navigation Hub</div>
                     <div class=sub-task-area>
-                        <div class="task-box">
 
+                        <div class="game-box">
+                            <div class="task-icon"> 🎮 </div>
+                            <button class="game-button"> Play</button>
                         </div>
-                    </div>>
-                </div>
+                        <div class="money-box">
+                            <div class="task-icon">💵</div>
+                            <div class="task-text"> Money: $0 </div>
+                        </div>
+                        
+                        <div class="tip-jar">
+                            <div class="task-icon">🫙</div>
+                            <div class="task-text"> Tips: $0 </div>
+                        </div>
+                    </div>
             </div>
+        </div>
             
 
         <!-- Treats Area -->
@@ -68,7 +79,7 @@
                         <div class="treat">
                             🍫
                         </div>
-                        <div class="treat-name">Chocolate</div>
+                        <div class="treat-name"> Milk Chocolate</div>
                         <button class="treat-button">50$</button>
                     </div>
 
@@ -100,40 +111,44 @@
             
         <!-- Ingredients Area-->
             <div class="ingredient-area">
-                    <div class="title-text"> Ingredients </div>
-                <div class="sub-ingredient-area">
-                    
-                    <div class="ingredient-box">
-                        <div class="ingredient">
-                        🧈
-                        </div>
-                    </div>
+                        <div class="title-text"> Ingredients </div>
+                    <div class="sub-ingredient-area">
+                        
 
-                    <div class="ingredient-box">
-                        <div class="ingredient">
-                        🥚
+                        <div class="ingredient-box">
+                            <div class="ingredient">
+                            🍓
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="ingredient-box">
-                        <div class="ingredient">
-                        🥛
+                        <div class="ingredient-box">
+                            <div class="ingredient">
+                            🥛
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="ingredient-box">
-                        <div class="ingredient">
-                        🍓
+                        <div class="ingredient-box">
+                            <div class="ingredient">
+                            🧈
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="ingredient-box">
-                        <div class="ingredient">
-                        🍽️
+                        <div class="ingredient-box">
+                            <div class="ingredient">
+                            🥚
+                            </div>
+                        </div>
+
+                        <div class="ingredient-box">
+                            <div class="ingredient">
+                            🍽️
+                            </div>
                         </div>
                     </div>
-                </div>
             </div>
+
+        <!-- Inventory Area -->
+    
     </div>
     <script src="bakery.js"></script>
 </body>

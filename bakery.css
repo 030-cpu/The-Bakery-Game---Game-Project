@@ -5,7 +5,7 @@
 }
 
 body{
-    background-color: rgb(225, 128, 143);
+    background: linear-gradient(to bottom, rgb(252, 158, 171) 25%, rgb(231, 55, 81) 100%);
 }
 
 .heading{
@@ -51,7 +51,7 @@ color: rgb(146, 181, 241);
 
 .container{
     padding: 10px;
-    height: auto;
+    height: fit-content;
     width: 1500px;
     margin: 20px auto 20px auto;
     border-radius: 5px;
@@ -59,14 +59,23 @@ color: rgb(146, 181, 241);
     border: 5px solid rgb(56, 98, 170);
 }
 
+.sub-container{
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
 /* customer section*/
 .customer-area{
 text-align: center;
-margin: 20px auto 0px auto;
+margin: 10px;
 padding: 10px;
 border-radius: 10px;
-width: 500px;
+width: 600px;
 background-color: rgb(26, 66, 134);
+border: 5px solid rgb(19, 54, 114);
 }
 
 .sub-customer-area{
@@ -84,14 +93,105 @@ margin: 10px;
 padding: 10px;
 background-color: rgb(239, 150, 163);
 }
-/* task bar section*/
 
+/* Game Section*/
+
+.game-box{
+    width: 200px;
+    height: 250px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(239, 150, 163);
+}
+
+.game-button{
+    margin: 5px auto 5px auto;
+    padding: 5px;
+    font-size: 15px;
+    border-radius: 5px;
+    color: rgb(247, 186, 195);
+    background-color: rgb(219, 96, 114);
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    letter-spacing: 2px;
+}
+
+/* task bar section*/
+.task-area{
+text-align: center;
+margin: 10px;
+padding: 10px;
+border-radius: 10px;
+width: 800px;
+background-color: rgb(26, 66, 134);
+border: 5px solid rgb(19, 54, 114);
+}
+
+.task-icon{
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    font-size: 100px;
+    border: 1px solid black;
+}
+
+.task-text{
+    text-align: center;
+    font-size: 20px;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(247, 186, 195);
+    background-color: rgb(219, 96, 114);
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    letter-spacing: 2px;
+}
+
+.sub-task-area{
+    background-color: rgb(91, 139, 222);
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.task-icon{
+    width: fit-content;
+    height: fit-content;
+    font-size: 100px;
+    margin: auto;
+    border-radius: 5px;
+    background-color: rgb(143, 177, 235);
+    border: 2.5px solid rgb(112, 146, 204);
+}
+.money-box{
+    width: 200px;
+    height: 250px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(239, 150, 163);
+}
+
+.tip-jar{
+    width: 200px;
+    height: 250px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(239, 150, 163);
+}
 
 /* treat section*/
 .treat-area{
-margin: 20px auto 20px auto;
+height: fit-content;
+margin: 10px;
 border-radius: 10px;
 background-color: rgb(26, 66, 134);
+border: 5px solid rgb(19, 54, 114);
 }
 
 .sub-treat-area {
@@ -119,6 +219,7 @@ background-color: rgb(239, 150, 163);
     margin: auto;
     border-radius: 5px;
     background-color: rgb(143, 177, 235);
+    border: 2.5px solid rgb(112, 146, 204);
 }
 
 .treat-name{
@@ -152,7 +253,10 @@ background-color: rgb(239, 150, 163);
     width: fit-content;
     height: fit-content;
     font-size: 100px;
-    border: 1px solid black;
+    margin: auto;
+    border-radius: 5px;
+    background-color: rgb(143, 177, 235);
+    border: 2.5px solid rgb(112, 146, 204);
 }
 
 .ingredient-box{
@@ -160,20 +264,21 @@ margin: 10px;
 padding: 10px;
 border-radius: 5px;
 background-color: rgb(239, 150, 163);
-};
+}
 
 .ingredient-area{
     height: fit-content;
+    width: auto;
     margin: 10px;
     border-radius: 10px;
     background-color: rgb(26, 66, 134);
+    border: 5px solid rgb(19, 54, 114);
 }
 
 .sub-ingredient-area{
     background-color: rgb(91, 139, 222);
     border-radius: 5px;
     margin: 10px;
-    border: 1px solid green;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

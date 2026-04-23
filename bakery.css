@@ -259,6 +259,9 @@ margin: 10px;
 padding: 10px;
 border-radius: 5px;
 background-color: rgb(239, 150, 163);
+display: flex;
+justify-content: center;
+flex-direction: column;
 }
 
 .treat{
@@ -272,27 +275,45 @@ background-color: rgb(239, 150, 163);
     position: relative;
 }
 
+.inv-box{
+    width: 150px;
+    height: 150px;
+    font-size: 100px;
+    margin: auto;
+    border-radius: 5px;
+    background-color: rgb(143, 177, 235);
+    border: 2.5px solid rgb(112, 146, 204);
+    position: relative;
+}
+
 .inventory{
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: fit-content;
+    height: fit-content;
+    /* width: 30px;
+    height: 30px; */
     border-radius: 50px;
     background-color: rgb(229, 222, 222);
+    border: 1px solid grey;
     right: -10px;
     bottom: -10px;
 }
 
 .inventory-num{
-    margin: auto;
-    padding: auto;
-    width: auto;
-    height: auto;
-};
+    width: 20px;
+    height: 20px;
+    font-size: 15px;
+    text-align: center;
+    margin: 5px;
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    color: rgb(53, 45, 47);;
+}
 
 .treat-name{
     text-align: center;
     font-size: 20px;
-    margin: 10px;
+    margin: 15px;
     padding: 5px;
     border-radius: 5px;
     color: rgb(247, 186, 195);
@@ -303,7 +324,7 @@ background-color: rgb(239, 150, 163);
 }
 
 .treat-button{
-    margin: 5px auto 5px auto;
+    /* margin: 5px auto 5px auto; */
     padding: 5px;
     font-size: 15px;
     border-radius: 5px;
@@ -312,6 +333,7 @@ background-color: rgb(239, 150, 163);
     font-family: "Cherry Bomb One", system-ui;
     font-style: normal;
     letter-spacing: 2px;
+    /* margin: auto; */
 }
 
 /* ingredient section*/
@@ -333,15 +355,25 @@ background-color: rgb(239, 150, 163);
     padding: 20px;
     margin: auto;
     border-radius: 5px;
-    background-color: rgb(143, 177, 235);
-    border: 2.5px solid rgb(112, 146, 204);
 }
 
 .ingredient-text{
     text-align: center;
     font-size: 20px;
-    margin: 10px;
+    margin: 15px;
     padding: 5px;
+    border-radius: 5px;
+    color: rgb(247, 186, 195);
+    background-color: rgb(219, 96, 114);
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    letter-spacing: 2px;
+}
+
+.ingredient-button{
+    /* margin: 5px auto 5px auto; */
+    padding: 10px;
+    font-size: 15px;
     border-radius: 5px;
     color: rgb(247, 186, 195);
     background-color: rgb(219, 96, 114);
@@ -355,6 +387,9 @@ margin: 10px;
 padding: 10px;
 border-radius: 5px;
 background-color: rgb(239, 150, 163);
+display: flex;
+justify-content: center;
+flex-direction: column;
 }
 
 .ingredient-area{

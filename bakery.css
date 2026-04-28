@@ -347,6 +347,7 @@ flex-direction: column;
     border-radius: 5px;
     background-color: rgb(143, 177, 235);
     border: 2.5px solid rgb(112, 146, 204);
+    position: relative;
 }
 
 .image{

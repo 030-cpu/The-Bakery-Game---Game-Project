@@ -52,7 +52,7 @@ color: rgb(146, 181, 241);
 .container{
     padding: 10px;
     height: fit-content;
-    width: 1500px;
+    width: 1800px;
     margin: 20px auto 20px auto;
     border-radius: 5px;
     background-color: rgb(65, 117, 206);
@@ -64,7 +64,7 @@ color: rgb(146, 181, 241);
     min-height: 400px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    margin: auto;
 }
 
 /* customer section*/
@@ -138,6 +138,7 @@ background-color: rgb(239, 150, 163);
     border-radius: 50px;
 }
 
+
 #serve{
     margin: 5px auto 5px auto;
     padding: 5px;
@@ -148,28 +149,6 @@ background-color: rgb(239, 150, 163);
     font-family: "Cherry Bomb One", system-ui;
     font-style: normal;
     letter-spacing: 2px;    
-}
-/* Game Box*/
-
-.game-box{
-    width: 200px;
-    height: 250px;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: rgb(239, 150, 163);
-}
-
-.game-button{
-    margin: 5px auto 5px auto;
-    padding: 5px;
-    font-size: 15px;
-    border-radius: 5px;
-    color: rgb(247, 186, 195);
-    background-color: rgb(219, 96, 114);
-    font-family: "Cherry Bomb One", system-ui;
-    font-style: normal;
-    letter-spacing: 2px;
 }
 
 /* task bar section*/
@@ -206,11 +185,11 @@ border: 5px solid rgb(19, 54, 114);
 .sub-task-area{
     background-color: rgb(91, 139, 222);
     border-radius: 5px;
-    margin: auto;
+    margin: 40px auto 0px auto;
     padding: 5px;
     display: flex;
-    justify-content: space-evenly;
-    height: 400px;
+    flex-wrap: wrap;
+    height: fit-content;
     width: fit-content;
 }
 
@@ -223,6 +202,41 @@ border: 5px solid rgb(19, 54, 114);
     background-color: rgb(143, 177, 235);
     border: 2.5px solid rgb(112, 146, 204);
 }
+
+.time-counter{
+    text-align: center;
+    font-size: 20px;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(247, 186, 195);
+    background-color: rgb(219, 96, 114);
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    letter-spacing: 2px;
+}
+
+.game-box{
+    width: fit-content;
+    height: fit-content;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(239, 150, 163);
+}
+
+.game-button{
+    margin: 5px auto 5px auto;
+    padding: 5px;
+    font-size: 15px;
+    border-radius: 5px;
+    color: rgb(247, 186, 195);
+    background-color: rgb(219, 96, 114);
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    letter-spacing: 2px;
+}
+
 .money-box{
     width: 200px;
     height: 250px;
@@ -320,7 +334,7 @@ flex-direction: column;
 .treat-name{
     text-align: center;
     font-size: 20px;
-    margin: 15px;
+    margin: 5px;
     padding: 5px;
     border-radius: 5px;
     color: rgb(247, 186, 195);
@@ -330,8 +344,35 @@ flex-direction: column;
     letter-spacing: 2px;
 }
 
+.required{
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(247, 186, 195);
+    background-color: rgb(219, 96, 114);
+    font-family: "Cherry Bomb One", system-ui;
+    font-style: normal;
+    letter-spacing: 2px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.required-item{
+    height: 50px;
+    width: 50px;
+    font-size: 25px;
+    margin: 2.5px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(143, 177, 235);
+    border: 2.5px solid rgb(112, 146, 204);
+}
+
 .treat-button{
     /* margin: 5px auto 5px auto; */
+    margin: 5px;
     padding: 5px;
     font-size: 15px;
     border-radius: 5px;

@@ -52,7 +52,7 @@ color: rgb(146, 181, 241);
 .container{
     padding: 10px;
     height: fit-content;
-    width: 1800px;
+    width: 1500px;
     margin: 20px auto 20px auto;
     border-radius: 5px;
     background-color: rgb(65, 117, 206);
@@ -91,8 +91,8 @@ border: 5px solid rgb(19, 54, 114);
 }
 
 .customer-box{
-width: fit-content;
-height: fit-content;
+width: 200px;
+height: 300px;
 border-radius: 10px;
 margin: 10px;
 padding: 10px;
@@ -170,9 +170,10 @@ border: 5px solid rgb(19, 54, 114);
 }
 
 .task-text{
-    text-align: center;
+    width: 100px;
+    height: 50;
     font-size: 20px;
-    margin: 10px;
+    margin: 20px auto 0px auto;
     padding: 5px;
     border-radius: 5px;
     color: rgb(247, 186, 195);
@@ -185,7 +186,7 @@ border: 5px solid rgb(19, 54, 114);
 .sub-task-area{
     background-color: rgb(91, 139, 222);
     border-radius: 5px;
-    margin: 40px auto 0px auto;
+    margin: 0px auto 0px auto;
     padding: 5px;
     display: flex;
     flex-wrap: wrap;
@@ -216,18 +217,24 @@ border: 5px solid rgb(19, 54, 114);
     letter-spacing: 2px;
 }
 
+.buttons-section{
+display:flex;
+flex-direction: column;
+}
+
 .game-box{
-    width: fit-content;
-    height: fit-content;
-    margin: 10px;
+    width: 200px;
+    height: 300px;
     padding: 10px;
+    margin: 10px;
     border-radius: 5px;
     background-color: rgb(239, 150, 163);
 }
 
 .game-button{
+    width: 100px;
+    height: 25px;
     margin: 5px auto 5px auto;
-    padding: 5px;
     font-size: 15px;
     border-radius: 5px;
     color: rgb(247, 186, 195);
@@ -239,7 +246,7 @@ border: 5px solid rgb(19, 54, 114);
 
 .money-box{
     width: 200px;
-    height: 250px;
+    height: 300px;
     margin: 10px;
     padding: 10px;
     border-radius: 5px;
@@ -248,7 +255,7 @@ border: 5px solid rgb(19, 54, 114);
 
 .tip-jar{
     width: 200px;
-    height: 250px;
+    height: 300px;
     margin: 10px;
     padding: 10px;
     border-radius: 5px;

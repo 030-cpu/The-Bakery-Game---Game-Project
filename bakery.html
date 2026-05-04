@@ -53,9 +53,10 @@
 
                         <div class="game-box">
                             <div class="task-icon"> 🎮 </div>
-                            <button class="game-button" onclick="playGame"> Play</button>
-                            <div> Time Counter </div>
-                            
+                            <button class="game-button" onclick="playGame"> Play </button>
+                            <button class="game-button" onclick="playGame"> Pause </button>
+                            <button class="game-button" onclick="playGame"> Stop </button>
+                            <div class="time-counter"> Time Counter </div>
                         </div>
                         <div class="money-box">
                             <div class="task-icon">💵</div>
@@ -83,7 +84,10 @@
                             </div>
                         </div>
                         <div class="treat-name">Candy</div>
-                        <button class="treat-button">5$</button>
+                        <div class="required">
+                            <div> <img src="sugar.png" alt=" Sugar Emoji" class="required-item"> </div>
+                        </div>
+                        <button class="treat-button">Unlock: 5$</button>
                     </div>
 
                     <div class="treat-box">
@@ -94,8 +98,29 @@
                             </div>
                         </div>
                         <div class="treat-name">Lolipop</div>
-                        <button class="treat-button">25$</button>
+                        <div class="required">
+                            <img src="sugar.png" alt=" Sugar Emoji" class="required-item">
+                            <div class="required-item">🍬</div>
+                        </div>
+                        <button class="treat-button"> Unlock: 25$</button>
                     </div>
+
+                    <div class="treat-box">
+                                <div class="inv-box">
+                                    <img src="ice-cream.png" alt=" Ice Cream Emoji" class="image">
+                                     <div class="inventory">
+                                         <div class="inventory-num">0</div>
+                                     </div>
+                                </div>
+                            <div class="treat-name"> Ice Cream </div>
+                            <div class="required">
+                            <div class="required-item">🥛</div>
+                            <img src="strawberry.png" alt=" Strawberry Emoji" class="required-item">
+                            <div class="required-item">🍭</div>
+
+                        </div>
+                            <button class="treat-button">Unlock: 50$</button>
+                        </div>
 
                     <div class="treat-box">
                         <div class="treat">
@@ -105,7 +130,13 @@
                             </div>
                         </div>
                         <div class="treat-name"> Milk Chocolate</div>
-                        <button class="treat-button">50$</button>
+                        <div class="required">
+                            <div> <img src="sugar.png" alt=" Sugar Emoji" class="required-item"> </div>
+                            <div> <img src="cocoa.png" alt=" Cocoa Emoji" class="required-item"> </div>
+                            <div class="required-item">🥛</div>
+                            
+                        </div>
+                        <button class="treat-button">Unlock: 100$</button>
                     </div>
 
                     <div class="treat-box">
@@ -116,9 +147,15 @@
                                      </div>
                                 </div>
                             <div class="treat-name"> Crispy Cookie </div>
-                            <button class="treat-button"> 100$ </button>
+                            <div class="required">
+                                <div> <img src="flour.png" alt=" Flour Emoji" class="required-item"> </div>
+                                <div class="required-item">🥛</div>
+                                <div class="required-item">🧈</div>
+                                <div class="required-item">🍫</div>
+                            </div>
+                            <button class="treat-button">Unlock: 250$</button>
                         </div>
-
+                    
                     <div class="treat-box">
                                 <div class="inv-box">
                                     <img src="choco-cake.png" alt=" Choco Cake Emoji" class="image">
@@ -127,19 +164,17 @@
                                      </div>
                                 </div>
                             <div class="treat-name"> Choco Lux Cake </div>
-                            <button class="treat-button"> 250$ </button>
+                            <div class="required">
+                                <div class="required-item">🥚</div>
+                                <div> <img src="flour.png" alt=" Flour Emoji" class="required-item"> </div>
+                                <div class="required-item">🍫</div>
+                                <div> <img src="strawberry.png" alt=" Strawberry Emoji" class="required-item"> </div>
+                                <div> <img src="cookie.png" alt=" Cookie Emoji" class="required-item"> </div>
+                            </div>
+                            <button class="treat-button">Unlock: 500$</button>
                         </div>
 
-                    <div class="treat-box">
-                        <div class="treat">
-                            🎂
-                            <div class="inventory">
-                                <p class="inventory-num">0</p>
-                            </div>
-                        </div>
-                        <div class="treat-name">Birthday Cake</div>
-                        <button class="treat-button">500$</button>
-                    </div>
+                    
                 </div>
             </div>
             
@@ -178,7 +213,7 @@
                                      </div>
                             </div>
                             <div class="ingredient-text"> Flour </div>
-                            <button class="ingredient-button"> 50$ </button>
+                            <button class="ingredient-button"> 35$ </button>
                         </div>
 
                         <div class="ingredient-box">
@@ -189,7 +224,7 @@
                                      </div>
                             </div>
                             <div class="ingredient-text"> Strawberry </div>
-                            <button class="ingredient-button"> 75$ </button>
+                            <button class="ingredient-button"> 45$ </button>
                         </div>
 
                         <div class="ingredient-box">
@@ -200,7 +235,7 @@
                                 </div>
                             </div>
                             <div class="ingredient-text"> Milk </div>
-                            <button class="ingredient-button"> 100$ </button>
+                            <button class="ingredient-button"> 55$ </button>
                         </div>
 
                         <div class="ingredient-box">
@@ -211,7 +246,7 @@
                                 </div>
                             </div>
                             <div class="ingredient-text"> Butter </div>
-                            <button class="ingredient-button"> 125$ </button>
+                            <button class="ingredient-button"> 65$ </button>
                         </div>
 
                         <div class="ingredient-box">
@@ -222,10 +257,10 @@
                                 </div>
                             </div>
                             <div class="ingredient-text"> Egg </div>
-                            <button class="ingredient-button"> 150$ </button>
+                            <button class="ingredient-button"> 75$ </button>
                         </div>
-                    </div>
-                    
+                        
+                    </div>   
             </div>
     </div>
     <script src="bakery.js"></script>

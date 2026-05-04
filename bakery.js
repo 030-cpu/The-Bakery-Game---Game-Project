@@ -1,17 +1,12 @@
-// ============================================================
-//  THE BAKERY — bakery.js
-// ============================================================
-
-// ── State ────────────────────────────────────────────────────
+// State 
 let paused = false;
 let gameRunning    = false;
-let money          = 100;
+let money          = 250;
 let tips           = 0;
 let elapsedSecs    = 0;
 let gameTimerID    = null;
 let lostCustomers  = 0;   // game ends at 3
 let bgMusic = new Audio();
-bgMusic.loop = true;
 
 
 // Inventory: ingredient counts
@@ -24,10 +19,10 @@ const inventory = {
 const treats = {
   candy:         { unlocked: false, cost: 5,   count: 0, ingredients: { sugar: 1 },                                                        sell: 8,   emoji: "🍬" },
   lolipop:       { unlocked: false, cost: 25,  count: 0, ingredients: { sugar: 1, candy: 1 },                                              sell: 18,  emoji: "🍭" },
-  icecream:      { unlocked: false, cost: 50,  count: 0, ingredients: { milk: 1, strawberry: 1, lolipop: 1 },                              sell: 30,  emoji: "🍦" },
+  icecream:      { unlocked: false, cost: 50,  count: 0, ingredients: { sugar: 1, milk: 1, strawberry: 1},                              sell: 30,  emoji: "🍦" },
   milkchocolate: { unlocked: false, cost: 100, count: 0, ingredients: { sugar: 1, cocoa: 1, milk: 1 },                                     sell: 55,  emoji: "🍫" },
-  crispycookie:  { unlocked: false, cost: 250, count: 0, ingredients: { flour: 1, milk: 1, butter: 1, milkchocolate: 1 },                  sell: 130, emoji: "🍪" },
-  chocolutzcake: { unlocked: false, cost: 500, count: 0, ingredients: { egg: 1, flour: 1, milkchocolate: 1, strawberry: 1, crispycookie: 1 }, sell: 300, emoji: "🎂" },
+  crispycookie:  { unlocked: false, cost: 250, count: 0, ingredients: { milk: 1, butter: 1, milkchocolate: 1 },                  sell: 130, emoji: "🍪" },
+  chocolutzcake: { unlocked: false, cost: 500, count: 0, ingredients: { egg: 1, flour: 1, milkchocolate: 1, strawberry: 1}, sell: 300, emoji: "🎂" },
 };
 
 // Ingredient shop prices
@@ -45,10 +40,10 @@ const LEVEL_POOLS = {
 };
 
 // [min, max] number of items per order at each level
-const LEVEL_ORDER_RANGE = { 1: [1, 2], 2: [3, 4], 3: [5, 6] };
+const LEVEL_ORDER_RANGE = { 1: [1, 2], 2: [1, 3], 3: [2, 4] };
 
 // Base serve timers in seconds
-const LEVEL_BASE_TIMERS = { 1: 30, 2: 20, 3: 15 };
+const LEVEL_BASE_TIMERS = { 1: 45, 2: 40, 3: 35 };
 
 // Tip chance per level (0–1)
 const TIP_CHANCE = { 1: 0.5, 2: 0.35, 3: 0.2 };
@@ -291,7 +286,7 @@ let earned = 0;
 for (const key of slot.order) earned += treats[key].sell;
 
 // +20% payout boost
-earned = Math.floor(earned * 2);
+earned = Math.floor(earned * 4);
 
 money += earned;
 
@@ -467,7 +462,6 @@ function startGame() {
     } 
     else if (elapsedSecs >= 60 && currentLevel < 2) {
       currentLevel = 2;
-      switchMusic();
       showFlash("⬆ Level 2 — Medium Mode!", "good");
     }
 

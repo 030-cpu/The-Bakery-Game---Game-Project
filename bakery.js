@@ -1,59 +1,113 @@
-// State 
-let paused = false;
-let gameRunning    = false;
-let money          = 250;
-let tips           = 0;
-let elapsedSecs    = 0;
-let gameTimerID    = null;
-let lostCustomers  = 0;   // game ends at 3
-let bgMusic = new Audio();
+// ── State ─────────────────────────────────────────────────────
+let paused        = false;
+let gameRunning   = false;
+let money         = 250;
+let tips          = 0;
+let elapsedSecs   = 0;
+let gameTimerID   = null;
+let lostCustomers = 0;
+let bgMusic        = new Audio();
+bgMusic.loop       = true;
+let currentMusicSrc = "";
 
+// ── Sound Effects ─────────────────────────────────────────────
+// To add your own sounds, replace the empty string in each src with your
+// audio file path, e.g.:  sfx.unlock.src = "sounds/unlock.mp3";
+// Supported formats: mp3, ogg, wav. All files should be in the same
+// directory as bakery.html unless you specify a subfolder path.
 
-// Inventory: ingredient counts
+const sfx = {
+  // Fired when a treat is unlocked for the first time (spend money to unlock)
+  unlock:     createSfx(/* e.g. "sounds/unlock.mp3" */ "sounds/unlock.mp3"),
+
+  // Fired when a treat is successfully crafted from ingredients
+  make:       createSfx(/* e.g. "sounds/make.mp3"   */ "sounds/make.mp3"),
+
+  // Fired when an ingredient is purchased from the shop
+  buy:        createSfx(/* e.g. "sounds/buy.mp3"    */ "sounds/buy.mp3"),
+
+  // Fired when a customer is served successfully
+  serve:      createSfx(/* e.g. "sounds/serve.mp3"  */ "sounds/serve.mp3"),
+
+  // Fired when a tip is earned on top of a sale
+  tip:        createSfx(/* e.g. "sounds/tip.mp3"    */ "sounds/tip.mp3"),
+
+  // Fired when the game moves to a new level (levels 2, 3, 4)
+  levelUp:    createSfx(/* e.g. "sounds/levelup.mp3"*/ "sounds/levelUp.mp3"),
+
+  // Fired in level 4 each time the speed escalates every 30 seconds
+  speedUp:    createSfx(/* e.g. "sounds/speedup.mp3"*/ "sounds/speedUp.mp3"),
+};
+
+// Creates a reusable Audio node; playing while already playing restarts from 0
+function createSfx(src) {
+  const a = new Audio();
+  if (src) a.src = src;
+  return a;
+}
+
+// Safe play: only fires if a src is actually set, rewinds first so rapid
+// repeated calls (e.g. buying multiple ingredients) always play fully
+function playSfx(sfxNode) {
+  if (!sfxNode.src || sfxNode.src === window.location.href) return;
+  sfxNode.currentTime = 0;
+  sfxNode.play().catch(() => {});
+}
+
+// ── Inventory ─────────────────────────────────────────────────
 const inventory = {
   sugar: 0, cocoa: 0, flour: 0,
   milk: 0, butter: 0, egg: 0, strawberry: 0
 };
 
-// Treat inventory & unlock state
+// ── Treats ────────────────────────────────────────────────────
 const treats = {
-  candy:         { unlocked: false, cost: 5,   count: 0, ingredients: { sugar: 1 },                                                        sell: 8,   emoji: "🍬" },
-  lolipop:       { unlocked: false, cost: 25,  count: 0, ingredients: { sugar: 1, candy: 1 },                                              sell: 18,  emoji: "🍭" },
-  icecream:      { unlocked: false, cost: 50,  count: 0, ingredients: { sugar: 1, milk: 1, strawberry: 1},                              sell: 30,  emoji: "🍦" },
-  milkchocolate: { unlocked: false, cost: 100, count: 0, ingredients: { sugar: 1, cocoa: 1, milk: 1 },                                     sell: 55,  emoji: "🍫" },
-  crispycookie:  { unlocked: false, cost: 250, count: 0, ingredients: { milk: 1, butter: 1, milkchocolate: 1 },                  sell: 130, emoji: "🍪" },
-  chocolutzcake: { unlocked: false, cost: 500, count: 0, ingredients: { egg: 1, flour: 1, milkchocolate: 1, strawberry: 1}, sell: 300, emoji: "🎂" },
+  candy:         { unlocked: false, cost: 5,   count: 0, ingredients: { sugar: 1 },                                    sell: 8,   emoji: "🍬" },
+  lolipop:       { unlocked: false, cost: 25,  count: 0, ingredients: { sugar: 1, candy: 1 },                          sell: 18,  emoji: "🍭" },
+  icecream:      { unlocked: false, cost: 50,  count: 0, ingredients: { sugar: 1, milk: 1, strawberry: 1 },            sell: 30,  emoji: "🍦" },
+  milkchocolate: { unlocked: false, cost: 100, count: 0, ingredients: { sugar: 1, cocoa: 1, milk: 1 },                 sell: 55,  emoji: "🍫" },
+  crispycookie:  { unlocked: false, cost: 250, count: 0, ingredients: { milk: 1, butter: 1, milkchocolate: 1 },        sell: 130, emoji: "🍪" },
+  chocolutzcake: { unlocked: false, cost: 500, count: 0, ingredients: { egg: 1, flour: 1, milkchocolate: 1, strawberry: 1 }, sell: 300, emoji: "🎂" },
 };
 
-// Ingredient shop prices
+// ── Ingredient Prices ─────────────────────────────────────────
 const ingredientPrices = {
   sugar: 10, cocoa: 25, flour: 35, strawberry: 45,
   milk: 55, butter: 65, egg: 75
 };
 
-// ── Customer / Level Config ───────────────────────────────────
-// Level 3 includes every treat
+// ── Level Config ──────────────────────────────────────────────
+// Level durations in seconds: L1=60, L2=60, L3=45, L4=infinite
+const LEVEL_START_TIMES = { 1: 0, 2: 60, 3: 120, 4: 165 };
+
 const LEVEL_POOLS = {
   1: ["candy", "lolipop"],
   2: ["candy", "lolipop", "icecream", "milkchocolate"],
-  3: ["candy", "lolipop", "icecream", "milkchocolate", "crispycookie", "chocolutzcake"],
+  3: ["candy", "lolipop", "icecream", "milkchocolate", "crispycookie"],
+  4: ["candy", "lolipop", "icecream", "milkchocolate", "crispycookie", "chocolutzcake"],
 };
 
-// [min, max] number of items per order at each level
-const LEVEL_ORDER_RANGE = { 1: [1, 2], 2: [1, 3], 3: [2, 4] };
+// [min, max] treats per order
+const LEVEL_ORDER_RANGE = { 1: [1, 2], 2: [1, 3], 3: [1, 3], 4: [1, 4] };
 
-// Base serve timers in seconds
-const LEVEL_BASE_TIMERS = { 1: 45, 2: 40, 3: 35 };
+// Base serve timers (seconds)
+const LEVEL_BASE_TIMERS = { 1: 45, 2: 40, 3: 35, 4: 30 };
 
-// Tip chance per level (0–1)
-const TIP_CHANCE = { 1: 0.5, 2: 0.35, 3: 0.2 };
+// Tip chance per level
+const TIP_CHANCE = { 1: 0.5, 2: 0.35, 3: 0.25, 4: 0.2 };
+
+// Music playback rates per level
+const LEVEL_MUSIC_RATE = { 1: 1.0, 2: 1.25, 3: 1.5, 4: 1.0 };
+
+// Level 4 escalation tracking
+let level4Intervals = 0; // how many 30-second intervals have passed in level 4
 
 const CUSTOMER_NAMES = [
   "Hailey","Audrina","Rylan","Nicholas","Eileen","Roger",
   "Priya","Sam","Luna","Finn","Zara","Marco"
 ];
 
-// Active customer slots
+// ── Customer Slots ────────────────────────────────────────────
 const customerSlots = [
   { occupied: false, timerID: null, secondsLeft: 0, maxSecs: 0, order: [], name: "" },
   { occupied: false, timerID: null, secondsLeft: 0, maxSecs: 0, order: [], name: "" },
@@ -62,16 +116,48 @@ const customerSlots = [
 let currentLevel    = 1;
 let spawnIntervalID = null;
 
-// How many full minutes have been spent in level 3 (for timer reduction)
-let level3Minutes = 0;
-
-// ── Timer calc ────────────────────────────────────────────────
-// Returns the current serve timer for the active level.
-// In level 3 it shrinks by 1 second for every additional minute survived.
+// ── Serve Timer Calc ──────────────────────────────────────────
 function getServeTimer() {
   const base = LEVEL_BASE_TIMERS[currentLevel];
-  if (currentLevel < 3) return base;
-  return Math.max(5, base - level3Minutes); // floor of 5s so it never hits 0
+  if (currentLevel < 4) return base;
+  // Level 4: reduce by 1s every 30 seconds survived, floor at 5s
+  return Math.max(5, base - level4Intervals);
+}
+
+// ── Level Progression ─────────────────────────────────────────
+function checkLevelProgression() {
+  const prevLevel = currentLevel;
+
+  if (elapsedSecs >= LEVEL_START_TIMES[4] && currentLevel < 4) {
+    currentLevel  = 4;
+    level4Intervals = 0;
+    applyMusicForLevel();
+    playSfx(sfx.levelUp);
+    showFlash("🔥 Level 4 — CHAOS MODE!", "warn");
+  } else if (elapsedSecs >= LEVEL_START_TIMES[3] && currentLevel < 3) {
+    currentLevel = 3;
+    applyMusicForLevel();
+    playSfx(sfx.levelUp);
+    showFlash("⚡ Level 3 — Hard Mode!", "warn");
+  } else if (elapsedSecs >= LEVEL_START_TIMES[2] && currentLevel < 2) {
+    currentLevel = 2;
+    applyMusicForLevel();
+    playSfx(sfx.levelUp);
+    showFlash("⬆ Level 2 — Medium Mode!", "good");
+  }
+
+  // Level 4 escalation: every 30s reduce timer and speed up music
+  if (currentLevel === 4) {
+    const secsInL4  = elapsedSecs - LEVEL_START_TIMES[4];
+    const intervals = Math.floor(secsInL4 / 30);
+    if (intervals > level4Intervals) {
+      level4Intervals = intervals;
+      bgMusic.playbackRate = Math.min(3.0, 1.0 + level4Intervals * 0.125);
+      const newTimer = getServeTimer();
+      playSfx(sfx.speedUp);
+      showFlash(`⚡ Pressure rising! Customers wait only ${newTimer}s`, "warn");
+    }
+  }
 }
 
 // ── DOM Helpers ───────────────────────────────────────────────
@@ -89,7 +175,7 @@ function renderCustomerSlot(index) {
   const tray     = box.querySelector("[id='customer-tray']");
   const serveBtn = box.querySelector("[id='serve']");
 
-  // Build timer bar wrapper once, replacing the old #timer pill
+  // Build timer bar wrapper once
   let timerWrap = box.querySelector(".timer-wrap");
   if (!timerWrap) {
     const oldTimer = box.querySelector("[id='timer']");
@@ -144,7 +230,7 @@ function renderCustomerSlot(index) {
   serveBtn.style.opacity = "1";
 }
 
-// ── Lost customer / game over ─────────────────────────────────
+// ── Lost Customer / Game Over ─────────────────────────────────
 function customerLeft() {
   lostCustomers++;
   const remaining = 3 - lostCustomers;
@@ -158,6 +244,7 @@ function customerLeft() {
 
 function gameOver() {
   gameRunning = false;
+  paused      = false;
   clearInterval(gameTimerID);
   clearInterval(spawnIntervalID);
   customerSlots.forEach((slot, i) => {
@@ -167,10 +254,10 @@ function gameOver() {
     renderCustomerSlot(i);
   });
   stopMusic();
-  document.getElementById("stop-btn").style.display = "none";
-  document.getElementById("play-btn").style.display = "";
+  document.getElementById("stop-btn").style.display  = "none";
+  document.getElementById("play-btn").style.display  = "";
+  document.getElementById("pause-btn").style.display = "";
 
-  // Show a game-over overlay
   let overlay = document.getElementById("game-over-overlay");
   if (!overlay) {
     overlay = document.createElement("div");
@@ -206,28 +293,26 @@ function gameOver() {
 }
 
 function resetGame() {
-  money         = 50;
-  tips          = 0;
-  elapsedSecs   = 0;
-  lostCustomers = 0;
-  currentLevel  = 1;
-  level3Minutes = 0;
-  // Reset treat counts (keep unlocked state so player keeps progress)
+  money           = 250;
+  tips            = 0;
+  elapsedSecs     = 0;
+  lostCustomers   = 0;
+  currentLevel    = 1;
+  level4Intervals = 0;
   Object.values(treats).forEach(t => { t.count = 0; });
-  // Reset ingredients
   Object.keys(inventory).forEach(k => { inventory[k] = 0; });
   updateUI();
 }
 
 // ── Spawn Customers ───────────────────────────────────────────
 function fillSlot(slotIndex) {
-  const slot    = customerSlots[slotIndex];
-  const pool    = LEVEL_POOLS[currentLevel];
+  const slot = customerSlots[slotIndex];
+  const pool = LEVEL_POOLS[currentLevel];
   const [minSize, maxSize] = LEVEL_ORDER_RANGE[currentLevel];
   const size    = Math.floor(Math.random() * (maxSize - minSize + 1)) + minSize;
   const maxSecs = getServeTimer();
 
-  const availableTreats = pool.filter(k => treats[k]); 
+  const availableTreats = pool.filter(k => treats[k]);
   if (availableTreats.length === 0) return;
 
   slot.name        = CUSTOMER_NAMES[Math.floor(Math.random() * CUSTOMER_NAMES.length)];
@@ -251,7 +336,7 @@ function fillSlot(slotIndex) {
       slot.timerID  = null;
       slot.occupied = false;
       renderCustomerSlot(slotIndex);
-      customerLeft(); // track loss & check game over
+      customerLeft();
     }
   }, 1000);
 }
@@ -282,20 +367,19 @@ function serveCustomer(index) {
 
   for (const [key, qty] of Object.entries(needed)) treats[key].count -= qty;
 
-let earned = 0;
-for (const key of slot.order) earned += treats[key].sell;
-
-// +20% payout boost
-earned = Math.floor(earned * 4);
-
-money += earned;
+  let earned = 0;
+  for (const key of slot.order) earned += treats[key].sell;
+  earned = Math.floor(earned * 4);
+  money += earned;
 
   if (Math.random() < TIP_CHANCE[currentLevel]) {
     const tipAmount = Math.floor(earned * 0.15) + Math.floor(Math.random() * 5) + 1;
     tips  += tipAmount;
     money += tipAmount;
+    playSfx(sfx.tip);
     showFlash(`💰 +$${earned} earned  +$${tipAmount} tip!`, "good");
   } else {
+    playSfx(sfx.serve);
     showFlash(`💵 +$${earned} earned!`, "good");
   }
 
@@ -329,6 +413,7 @@ function unlockTreat(key) {
   if (money < t.cost) { showFlash(`❌ Need $${t.cost} to unlock ${t.emoji}`, "warn"); return; }
   money -= t.cost;
   t.unlocked = true;
+  playSfx(sfx.unlock);
   updateUI();
   showFlash(`🔓 ${t.emoji} unlocked!`, "good");
 }
@@ -348,6 +433,7 @@ function makeTreat(key) {
     else if (treats[req] !== undefined) treats[req].count -= qty;
   }
   t.count++;
+  playSfx(sfx.make);
   updateUI();
   showFlash(`✅ Made a ${t.emoji}!`, "good");
 }
@@ -366,6 +452,7 @@ function setupIngredientButtons() {
       if (money < price) { showFlash(`❌ Need $${price} to buy ${key}`, "warn"); return; }
       money -= price;
       inventory[key]++;
+      playSfx(sfx.buy);
       updateUI();
       showFlash(`🛒 Bought 1 ${key}!`, "good");
     });
@@ -374,120 +461,100 @@ function setupIngredientButtons() {
 
 // ── Navigation Hub ────────────────────────────────────────────
 function setupNavHub() {
-  const buttons = document.querySelectorAll(".game-box .game-button");
-
-  const playBtn  = buttons[0];
-  const pauseBtn = buttons[1];
-  const stopBtn  = buttons[2];
+  const playBtn  = document.getElementById("play-btn");
+  const pauseBtn = document.getElementById("pause-btn");
+  const stopBtn  = document.getElementById("stop-btn");
 
   playBtn.textContent  = "▶ Play";
   pauseBtn.textContent = "⏸ Pause";
   stopBtn.textContent  = "⏹ Stop";
 
-  playBtn.onclick = () => {
-    if (!gameRunning && !paused) startGame();
-    else if (paused) resumeGame();
-  };
+  // Initial visibility: only play shown
+  stopBtn.style.display  = "none";
+  pauseBtn.style.display = "none";
 
+  playBtn.onclick  = () => {
+    if (!gameRunning && !paused) startGame();
+    else if (paused)             resumeGame();
+  };
   pauseBtn.onclick = () => pauseGame();
   stopBtn.onclick  = () => stopGame();
 }
 
+// ── Game Flow ─────────────────────────────────────────────────
 function startGame() {
-  gameRunning   = true;
-  paused = false;
-  elapsedSecs   = 0;
-  lostCustomers = 0;
-  currentLevel  = 1;
-  level3Minutes = 0;
+  gameRunning     = true;
+  paused          = false;
+  elapsedSecs     = 0;
+  lostCustomers   = 0;
+  currentLevel    = 1;
+  level4Intervals = 0;
 
   startMusic();
 
   gameTimerID = setInterval(() => {
     elapsedSecs++;
     updateTimerDisplay();
-
-    // Level progression
-    if (elapsedSecs >= 120 && currentLevel < 3) {
-      currentLevel = 3;
-      level3Minutes = 0;
-      showFlash("🔥 Level 3 — Expert Mode!", "good");
-    } else if (elapsedSecs >= 60 && currentLevel < 2) {
-      currentLevel = 2;
-      showFlash("⬆ Level 2 — Medium Mode!", "good");
-    }
-
-    // In level 3, every additional minute reduces the serve timer by 1
-    if (currentLevel === 3) {
-      const minsInL3 = Math.floor((elapsedSecs - 120) / 60);
-      if (minsInL3 > level3Minutes) {
-        level3Minutes = minsInL3;
-        const newTimer = getServeTimer();
-        showFlash(`⚡ Timer reduced! Customers now wait only ${newTimer}s`, "warn");
-      }
-    }
+    checkLevelProgression();
   }, 1000);
 
-  function pauseGame() {
-  if (!gameRunning) return;
+  spawnIntervalID = setInterval(spawnCustomers, 12000);
+  setTimeout(spawnCustomers, 500);
 
-  paused = true;
+  document.getElementById("play-btn").style.display  = "none";
+  document.getElementById("pause-btn").style.display = "";
+  document.getElementById("stop-btn").style.display  = "";
+  showFlash("🎮 Game started! Good luck!", "good");
+  updateUI();
+}
+
+function pauseGame() {
+  if (!gameRunning || paused) return;
+
+  paused      = true;
   gameRunning = false;
 
   clearInterval(gameTimerID);
   clearInterval(spawnIntervalID);
 
+  // Freeze all customer countdowns
   customerSlots.forEach(slot => {
     clearInterval(slot.timerID);
     slot.timerID = null;
   });
 
-  function resumeGame() {
+  pauseMusic();
+
+  document.getElementById("play-btn").style.display  = "";
+  document.getElementById("play-btn").textContent    = "▶ Resume";
+  document.getElementById("pause-btn").style.display = "none";
+
+  showFlash("⏸ Game paused", "warn");
+}
+
+function resumeGame() {
   if (!paused) return;
 
-  paused = false;
+  paused      = false;
   gameRunning = true;
 
-  // resume timer
+  // Resume main clock
   gameTimerID = setInterval(() => {
     elapsedSecs++;
     updateTimerDisplay();
-
-    // level progression
-    if (elapsedSecs >= 120 && currentLevel < 3) {
-      currentLevel = 3;
-      level3Minutes = 0;
-      switchMusic();
-      showFlash("🔥 Level 3 — Expert Mode!", "good");
-    } 
-    else if (elapsedSecs >= 60 && currentLevel < 2) {
-      currentLevel = 2;
-      showFlash("⬆ Level 2 — Medium Mode!", "good");
-    }
-
-    if (currentLevel === 3) {
-      const minsInL3 = Math.floor((elapsedSecs - 120) / 60);
-      if (minsInL3 > level3Minutes) {
-        level3Minutes = minsInL3;
-        showFlash(`⚡ Timer reduced!`, "warn");
-      }
-    }
-
+    checkLevelProgression();
   }, 1000);
 
-  // resume spawns
+  // Resume spawning
   spawnIntervalID = setInterval(spawnCustomers, 12000);
 
-  // restart customer timers
+  // Resume individual customer countdowns
   customerSlots.forEach((slot, i) => {
     if (!slot.occupied) return;
-
     slot.timerID = setInterval(() => {
       if (!gameRunning) return;
-
       slot.secondsLeft--;
       renderCustomerSlot(i);
-
       if (slot.secondsLeft <= 0) {
         clearInterval(slot.timerID);
         slot.timerID  = null;
@@ -499,24 +566,17 @@ function startGame() {
   });
 
   resumeMusic();
+
+  document.getElementById("play-btn").style.display  = "none";
+  document.getElementById("play-btn").textContent    = "▶ Play";
+  document.getElementById("pause-btn").style.display = "";
+
   showFlash("▶ Game resumed", "good");
-}
-
-  pauseMusic();
-  showFlash("⏸ Game paused", "warn");
-}
-
-  spawnIntervalID = setInterval(spawnCustomers, 12000);
-  setTimeout(spawnCustomers, 500);
-
-  document.getElementById("play-btn").style.display = "none";
-  document.getElementById("stop-btn").style.display = "";
-  showFlash("🎮 Game started! Good luck!", "good");
-  updateUI();
 }
 
 function stopGame() {
   gameRunning = false;
+  paused      = false;
   clearInterval(gameTimerID);
   clearInterval(spawnIntervalID);
   customerSlots.forEach((slot, i) => {
@@ -526,36 +586,53 @@ function stopGame() {
     renderCustomerSlot(i);
   });
   stopMusic();
-  document.getElementById("stop-btn").style.display = "none";
-  document.getElementById("play-btn").style.display = "";
+
+  document.getElementById("stop-btn").style.display  = "none";
+  document.getElementById("pause-btn").style.display = "none";
+  document.getElementById("play-btn").style.display  = "";
+  document.getElementById("play-btn").textContent    = "▶ Play";
+
   showFlash("⏹ Game stopped.", "warn");
 }
 
 function updateTimerDisplay() {
   const m  = String(Math.floor(elapsedSecs / 60)).padStart(2, "0");
   const s  = String(elapsedSecs % 60).padStart(2, "0");
-  const el = document.querySelector(".game-box div:last-child");
-  if (el) el.textContent = `⏱ ${m}:${s}`;
+  const el = document.querySelector(".time-counter");
+  if (el) el.textContent = `⏱ ${m}:${s}  Lvl ${currentLevel}`;
 }
 
 // ── Music ─────────────────────────────────────────────────────
+function applyMusicForLevel() {
+  const newSrc  = currentLevel === 4 ? "monopoly-man.mp3" : "the-bakery.mp3";
+  const newRate = currentLevel === 4 ? 1.0 : LEVEL_MUSIC_RATE[currentLevel];
 
-function switchMusic() {
-  if (currentLevel === 3) {
-    bgMusic.src = "monopoly-man.mp3";
+  if (currentMusicSrc !== newSrc) {
+    // Actually switching tracks — reload from start
+    bgMusic.pause();
+    bgMusic.src          = newSrc;
+    bgMusic.playbackRate = newRate;
+    bgMusic.currentTime  = 0;
+    currentMusicSrc      = newSrc;
+    bgMusic.play().catch(() => {});
   } else {
-    bgMusic.src = "the-bakery.mp3";
+    // Same track, just nudge the speed — no interruption
+    bgMusic.playbackRate = newRate;
   }
-  bgMusic.play().catch(() => {});
 }
 
 function startMusic() {
-  switchMusic();
+  currentMusicSrc      = "the-bakery.mp3";
+  bgMusic.src          = "the-bakery.mp3";
+  bgMusic.playbackRate = LEVEL_MUSIC_RATE[1];
+  bgMusic.currentTime  = 0;
+  bgMusic.play().catch(() => {});
 }
 
 function stopMusic() {
   bgMusic.pause();
-  bgMusic.currentTime = 0;
+  bgMusic.currentTime  = 0;
+  bgMusic.playbackRate = 1.0;
 }
 
 function pauseMusic() {

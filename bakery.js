@@ -37,6 +37,10 @@ const sfx = {
 
   // Fired in level 4 each time the speed escalates every 30 seconds
   speedUp:    createSfx(/* e.g. "sounds/speedup.mp3"*/ "sounds/speedUp.mp3"),
+
+  // Fired when player can't afford an ingredient, can't make a treat,
+  // or when a customer leaves without being served
+  error:      createSfx(/* e.g. "sounds/error.mp3"  */ "sounds/error.mp3"),
 };
 
 // Creates a reusable Audio node; playing while already playing restarts from 0
@@ -64,10 +68,10 @@ const inventory = {
 const treats = {
   candy:         { unlocked: false, cost: 5,   count: 0, ingredients: { sugar: 1 },                                    sell: 8,   emoji: "🍬" },
   lolipop:       { unlocked: false, cost: 25,  count: 0, ingredients: { sugar: 1, candy: 1 },                          sell: 18,  emoji: "🍭" },
-  icecream:      { unlocked: false, cost: 50,  count: 0, ingredients: { sugar: 1, milk: 1, strawberry: 1 },            sell: 30,  emoji: "🍦" },
+  icecream:      { unlocked: false, cost: 50,  count: 0, ingredients: { sugar: 1, milk: 1, strawberry: 1 },            sell: 30,  emoji: "🍦", image: "ice-cream.png" },
   milkchocolate: { unlocked: false, cost: 100, count: 0, ingredients: { sugar: 1, cocoa: 1, milk: 1 },                 sell: 55,  emoji: "🍫" },
-  crispycookie:  { unlocked: false, cost: 250, count: 0, ingredients: { milk: 1, butter: 1, milkchocolate: 1 },        sell: 130, emoji: "🍪" },
-  chocolutzcake: { unlocked: false, cost: 500, count: 0, ingredients: { egg: 1, flour: 1, milkchocolate: 1, strawberry: 1 }, sell: 300, emoji: "🎂" },
+  crispycookie:  { unlocked: false, cost: 250, count: 0, ingredients: { milk: 1, butter: 1, milkchocolate: 1 },        sell: 130, emoji: "🍪", image: "cookie.png" },
+  chocolutzcake: { unlocked: false, cost: 500, count: 0, ingredients: { egg: 1, flour: 1, milkchocolate: 1, strawberry: 1 }, sell: 300, emoji: "🎂", image: "choco-cake.png" },
 };
 
 // ── Ingredient Prices ─────────────────────────────────────────
@@ -131,18 +135,18 @@ function checkLevelProgression() {
   if (elapsedSecs >= LEVEL_START_TIMES[4] && currentLevel < 4) {
     currentLevel  = 4;
     level4Intervals = 0;
-    applyMusicForLevel();
     playSfx(sfx.levelUp);
+    setTimeout(() => applyMusicForLevel(), 1200); // let the sfx play before switching track
     showFlash("🔥 Level 4 — CHAOS MODE!", "warn");
   } else if (elapsedSecs >= LEVEL_START_TIMES[3] && currentLevel < 3) {
     currentLevel = 3;
-    applyMusicForLevel();
     playSfx(sfx.levelUp);
+    setTimeout(() => applyMusicForLevel(), 1200);
     showFlash("⚡ Level 3 — Hard Mode!", "warn");
   } else if (elapsedSecs >= LEVEL_START_TIMES[2] && currentLevel < 2) {
     currentLevel = 2;
-    applyMusicForLevel();
     playSfx(sfx.levelUp);
+    setTimeout(() => applyMusicForLevel(), 1200);
     showFlash("⬆ Level 2 — Medium Mode!", "good");
   }
 
@@ -210,14 +214,20 @@ function renderCustomerSlot(index) {
 
   iconEl.textContent = "🧑";
 
-  const orderEmojis = slot.order
-    .map(k => treats[k] ? treats[k].emoji : "❓")
-    .join(" ");
+  const imgStyle   = "display:inline-block;width:44px;height:44px;margin:3px;border-radius:6px;vertical-align:middle;object-fit:contain;";
+  const spanStyle  = "display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin:3px;font-size:30px;border-radius:6px;vertical-align:middle;";
+
+  const orderHTML = slot.order.map(k => {
+    const t = treats[k];
+    if (!t)      return `<span style="${spanStyle}">❓</span>`;
+    if (t.image) return `<img src="${t.image}" alt="${k}" style="${imgStyle}">`;
+    return `<span style="${spanStyle}">${t.emoji}</span>`;
+  }).join("");
 
   tray.innerHTML = `
     <div><strong>${slot.name}</strong></div>
-    <div>I would like…</div>
-    <div style="font-size:28px; letter-spacing:4px;">${orderEmojis}</div>
+    <div>I would like\u2026</div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;margin-top:4px;">${orderHTML}</div>
   `;
 
   const pct = Math.max(0, (slot.secondsLeft / slot.maxSecs) * 100);
@@ -233,6 +243,7 @@ function renderCustomerSlot(index) {
 // ── Lost Customer / Game Over ─────────────────────────────────
 function customerLeft() {
   lostCustomers++;
+  playSfx(sfx.error);
   const remaining = 3 - lostCustomers;
   if (lostCustomers >= 3) {
     showFlash("💔 3 customers lost — GAME OVER!", "warn");
@@ -271,15 +282,21 @@ function gameOver() {
     });
     document.body.appendChild(overlay);
   }
+  const goMins = String(Math.floor(elapsedSecs / 60)).padStart(2, "0");
+  const goSecs = String(elapsedSecs % 60).padStart(2, "0");
+  const levelNames = { 1: "Easy", 2: "Medium", 3: "Hard", 4: "CHAOS" };
+  const statStyle = "font-size:20px;color:rgb(247,186,195);margin:6px 0;";
+
   overlay.innerHTML = `
-    <div style="background:rgb(219,96,114);padding:40px 60px;border-radius:20px;text-align:center;border:5px solid rgb(207,91,108);">
+    <div style="background:rgb(219,96,114);padding:40px 60px;border-radius:20px;text-align:center;border:5px solid rgb(207,91,108);box-shadow:0 6px 0 rgb(180,65,82),0 8px 24px rgba(0,0,0,0.3);">
       <div style="font-size:60px;">💔</div>
-      <div style="font-size:36px;color:rgb(247,186,195);letter-spacing:2px;">Game Over!</div>
-      <div style="font-size:20px;color:rgb(247,186,195);margin:10px 0;">You lost 3 customers</div>
-      <div style="font-size:22px;color:rgb(247,186,195);margin:10px 0;">
-        💵 $${money} earned &nbsp;|&nbsp; 🫙 $${tips} in tips
+      <div style="font-size:36px;color:rgb(247,186,195);letter-spacing:2px;margin-bottom:16px;">Game Over!</div>
+      <div style="background:rgb(207,91,108);border-radius:10px;padding:14px 24px;margin-bottom:16px;display:flex;flex-direction:column;gap:8px;">
+        <div style="${statStyle}">⏱ Time survived: ${goMins}:${goSecs}</div>
+        <div style="${statStyle}">🏆 Level reached: ${currentLevel} — ${levelNames[currentLevel]}</div>
+        <div style="${statStyle}">💵 $${money} earned &nbsp;|&nbsp; 🫙 $${tips} in tips</div>
       </div>
-      <button id="restart-btn" style="margin-top:20px;padding:10px 30px;font-size:20px;border-radius:10px;
+      <button id="restart-btn" style="margin-top:8px;padding:10px 30px;font-size:20px;border-radius:10px;
         color:rgb(247,186,195);background:rgb(65,117,206);border:3px solid rgb(56,98,170);
         font-family:'Cherry Bomb One',system-ui;letter-spacing:2px;cursor:pointer;">
         Play Again
@@ -360,6 +377,7 @@ function serveCustomer(index) {
   for (const [key, qty] of Object.entries(needed)) {
     const t = treats[key];
     if (!t || !t.unlocked || t.count < qty) {
+      playSfx(sfx.error);
       showFlash(`❌ Not enough ${t?.emoji ?? key}!`, "warn");
       return;
     }
@@ -410,7 +428,7 @@ function setupTreatButtons() {
 
 function unlockTreat(key) {
   const t = treats[key];
-  if (money < t.cost) { showFlash(`❌ Need $${t.cost} to unlock ${t.emoji}`, "warn"); return; }
+  if (money < t.cost) { playSfx(sfx.error); showFlash(`❌ Need $${t.cost} to unlock ${t.emoji}`, "warn"); return; }
   money -= t.cost;
   t.unlocked = true;
   playSfx(sfx.unlock);
@@ -422,9 +440,11 @@ function makeTreat(key) {
   const t = treats[key];
   for (const [req, qty] of Object.entries(t.ingredients)) {
     if (inventory[req] !== undefined && inventory[req] < qty) {
+      playSfx(sfx.error);
       showFlash(`❌ Need ${qty} ${req}`, "warn"); return;
     }
     if (treats[req] !== undefined && treats[req].count < qty) {
+      playSfx(sfx.error);
       showFlash(`❌ Need ${qty} ${treats[req].emoji}`, "warn"); return;
     }
   }
@@ -449,7 +469,7 @@ function setupIngredientButtons() {
     btn.addEventListener("click", () => {
       if (!gameRunning) { showFlash("▶ Start the game first!", "warn"); return; }
       const price = ingredientPrices[key];
-      if (money < price) { showFlash(`❌ Need $${price} to buy ${key}`, "warn"); return; }
+      if (money < price) { playSfx(sfx.error); showFlash(`❌ Need $${price} to buy ${key}`, "warn"); return; }
       money -= price;
       inventory[key]++;
       playSfx(sfx.buy);
@@ -479,6 +499,9 @@ function setupNavHub() {
   };
   pauseBtn.onclick = () => pauseGame();
   stopBtn.onclick  = () => stopGame();
+
+  const howBtn = document.getElementById("how-to-play-btn");
+  if (howBtn) howBtn.addEventListener("click", showHowToPlay);
 }
 
 // ── Game Flow ─────────────────────────────────────────────────
@@ -711,6 +734,10 @@ function showFlash(msg, type = "good") {
   }
   el.textContent      = msg;
   el.style.background = type === "good" ? "rgb(159,239,150)" : "rgb(239,150,163)";
+  el.style.border     = type === "good" ? "4px solid rgb(120,200,112)" : "4px solid rgb(207,91,108)";
+  el.style.boxShadow  = type === "good"
+    ? "0 4px 0 rgb(100,175,95), 0 6px 16px rgba(0,0,0,0.18)"
+    : "0 4px 0 rgb(180,65,82),  0 6px 16px rgba(0,0,0,0.18)";
   el.style.color      = "rgb(40,40,40)";
   el.style.opacity    = "1";
   clearTimeout(flashTO);
@@ -724,6 +751,143 @@ function setupServeButtons() {
     const btn = box.querySelector("[id='serve']");
     if (btn) btn.addEventListener("click", () => serveCustomer(i));
   });
+}
+
+// ── How to Play ───────────────────────────────────────────────
+function showHowToPlay() {
+  let overlay = document.getElementById("how-to-play-overlay");
+  if (overlay) { overlay.remove(); return; }
+
+  overlay = document.createElement("div");
+  overlay.id = "how-to-play-overlay";
+  Object.assign(overlay.style, {
+    position: "fixed", inset: "0",
+    background: "rgba(0,0,0,0.6)",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    zIndex: "10000", fontFamily: "'Cherry Bomb One', system-ui",
+  });
+
+  const card = `
+    <div style="
+      background: rgb(219,96,114);
+      border: 5px solid rgb(207,91,108);
+      box-shadow: 0 6px 0 rgb(180,65,82), 0 8px 24px rgba(0,0,0,0.3);
+      border-radius: 20px;
+      padding: 36px 48px;
+      max-width: 620px;
+      width: 90%;
+      text-align: center;
+      color: rgb(247,186,195);
+      max-height: 90vh;
+      overflow-y: auto;
+    ">
+      <div style="font-size:52px; margin-bottom:8px;">🍰</div>
+      <div style="font-size:32px; letter-spacing:2px; margin-bottom:20px;">How to Play</div>
+
+      <div style="
+        background: rgb(207,91,108);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 14px;
+        text-align: left;
+        display: flex; gap: 14px; align-items: flex-start;
+      ">
+        <div style="font-size:30px; line-height:1;">🛒</div>
+        <div>
+          <div style="font-size:18px; letter-spacing:1.5px; margin-bottom:4px;">Buy Ingredients</div>
+          <div style="font-size:13px; letter-spacing:1px; opacity:0.9; font-family:system-ui; line-height:1.5;">
+            Use your starting $250 to purchase ingredients from the Ingredients section. Each ingredient has a different cost — cheaper ones unlock early treats, pricier ones unlock the good stuff.
+          </div>
+        </div>
+      </div>
+
+      <div style="
+        background: rgb(207,91,108);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 14px;
+        text-align: left;
+        display: flex; gap: 14px; align-items: flex-start;
+      ">
+        <div style="font-size:30px; line-height:1;">🔓</div>
+        <div>
+          <div style="font-size:18px; letter-spacing:1.5px; margin-bottom:4px;">Unlock Treats</div>
+          <div style="font-size:13px; letter-spacing:1px; opacity:0.9; font-family:system-ui; line-height:1.5;">
+            Spend money to unlock treats in the Treats section. Once unlocked, click the button again to craft them using your ingredients. Some treats require other treats as ingredients too!
+          </div>
+        </div>
+      </div>
+
+      <div style="
+        background: rgb(207,91,108);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 14px;
+        text-align: left;
+        display: flex; gap: 14px; align-items: flex-start;
+      ">
+        <div style="font-size:30px; line-height:1;">🧑</div>
+        <div>
+          <div style="font-size:18px; letter-spacing:1.5px; margin-bottom:4px;">Serve Customers</div>
+          <div style="font-size:13px; letter-spacing:1px; opacity:0.9; font-family:system-ui; line-height:1.5;">
+            Customers arrive and show what treats they want. Make sure you have the right treats crafted, then hit Serve Customer! before the timer runs out. Serve fast for a chance at a tip!
+          </div>
+        </div>
+      </div>
+
+      <div style="
+        background: rgb(207,91,108);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 14px;
+        text-align: left;
+        display: flex; gap: 14px; align-items: flex-start;
+      ">
+        <div style="font-size:30px; line-height:1;">⚡</div>
+        <div>
+          <div style="font-size:18px; letter-spacing:1.5px; margin-bottom:4px;">Level Progression</div>
+          <div style="font-size:13px; letter-spacing:1px; opacity:0.9; font-family:system-ui; line-height:1.5;">
+            The game has 4 levels. Each level unlocks new treats, adds more demanding orders, and shrinks the serve timer. Reach Level 4 — CHAOS MODE — and the pressure never stops escalating!
+          </div>
+        </div>
+      </div>
+
+      <div style="
+        background: rgb(207,91,108);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        text-align: left;
+        display: flex; gap: 14px; align-items: flex-start;
+      ">
+        <div style="font-size:30px; line-height:1;">💔</div>
+        <div>
+          <div style="font-size:18px; letter-spacing:1.5px; margin-bottom:4px;">Don't Lose Customers!</div>
+          <div style="font-size:13px; letter-spacing:1px; opacity:0.9; font-family:system-ui; line-height:1.5;">
+            Let 3 customers leave without being served and it's Game Over. Keep an eye on those timers — the bar turns yellow then red as time runs low!
+          </div>
+        </div>
+      </div>
+
+      <button id="close-how-to-play" style="
+        padding: 10px 36px;
+        font-size: 20px;
+        border-radius: 10px;
+        border: 3px solid rgb(56,98,170);
+        background: rgb(65,117,206);
+        color: rgb(247,186,195);
+        font-family: 'Cherry Bomb One', system-ui;
+        letter-spacing: 2px;
+        cursor: pointer;
+      ">Let's Bake! 🍪</button>
+    </div>
+  `;
+
+  overlay.innerHTML = card;
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener("click", e => { if (e.target === overlay) overlay.remove(); });
+  document.getElementById("close-how-to-play").addEventListener("click", () => overlay.remove());
 }
 
 // ── Init ──────────────────────────────────────────────────────

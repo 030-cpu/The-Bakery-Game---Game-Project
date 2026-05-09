@@ -18,29 +18,29 @@ let currentMusicSrc = "";
 
 const sfx = {
   // Fired when a treat is unlocked for the first time (spend money to unlock)
-  unlock:     createSfx(/* e.g. "sounds/unlock.mp3" */ "sounds/unlock.mp3"),
+  unlock:     createSfx(/* e.g. "sounds/unlock.mp3" */ "unlock.mp3"),
 
   // Fired when a treat is successfully crafted from ingredients
-  make:       createSfx(/* e.g. "sounds/make.mp3"   */ "sounds/make.mp3"),
+  make:       createSfx(/* e.g. "sounds/make.mp3"   */ "make.mp3"),
 
   // Fired when an ingredient is purchased from the shop
-  buy:        createSfx(/* e.g. "sounds/buy.mp3"    */ "sounds/buy.mp3"),
+  buy:        createSfx(/* e.g. "sounds/buy.mp3"    */ "buy.mp3"),
 
   // Fired when a customer is served successfully
-  serve:      createSfx(/* e.g. "sounds/serve.mp3"  */ "sounds/serve.mp3"),
+  serve:      createSfx(/* e.g. "sounds/serve.mp3"  */ "serve.mp3"),
 
   // Fired when a tip is earned on top of a sale
-  tip:        createSfx(/* e.g. "sounds/tip.mp3"    */ "sounds/tip.mp3"),
+  tip:        createSfx(/* e.g. "sounds/tip.mp3"    */ "tip.mp3"),
 
   // Fired when the game moves to a new level (levels 2, 3, 4)
-  levelUp:    createSfx(/* e.g. "sounds/levelup.mp3"*/ "sounds/levelUp.mp3"),
+  levelUp:    createSfx(/* e.g. "sounds/levelup.mp3"*/ "levelUp.mp3"),
 
   // Fired in level 4 each time the speed escalates every 30 seconds
-  speedUp:    createSfx(/* e.g. "sounds/speedup.mp3"*/ "sounds/speedUp.mp3"),
+  speedUp:    createSfx(/* e.g. "sounds/speedup.mp3"*/ "speedUp.mp3"),
 
   // Fired when player can't afford an ingredient, can't make a treat,
   // or when a customer leaves without being served
-  error:      createSfx(/* e.g. "sounds/error.mp3"  */ "sounds/error.mp3"),
+  error:      createSfx(/* e.g. "sounds/error.mp3"  */ "error.mp3"),
 };
 
 // Creates a reusable Audio node; playing while already playing restarts from 0

@@ -11,10 +11,6 @@ bgMusic.loop       = true;
 let currentMusicSrc = "";
 
 // ── Sound Effects ─────────────────────────────────────────────
-// To add your own sounds, replace the empty string in each src with your
-// audio file path, e.g.:  sfx.unlock.src = "sounds/unlock.mp3";
-// Supported formats: mp3, ogg, wav. All files should be in the same
-// directory as bakery.html unless you specify a subfolder path.
 
 const sfx = {
   // Fired when a treat is unlocked for the first time (spend money to unlock)
@@ -86,13 +82,13 @@ const LEVEL_START_TIMES = { 1: 0, 2: 60, 3: 120, 4: 165 };
 
 const LEVEL_POOLS = {
   1: ["candy", "lolipop"],
-  2: ["candy", "lolipop", "icecream", "milkchocolate"],
+  2: ["candy", "lolipop", "icecream"],
   3: ["candy", "lolipop", "icecream", "milkchocolate", "crispycookie"],
   4: ["candy", "lolipop", "icecream", "milkchocolate", "crispycookie", "chocolutzcake"],
 };
 
 // [min, max] treats per order
-const LEVEL_ORDER_RANGE = { 1: [1, 2], 2: [1, 3], 3: [1, 3], 4: [1, 4] };
+const LEVEL_ORDER_RANGE = { 1: [1, 2], 2: [1, 3], 3: [1, 4], 4: [2, 4] };
 
 // Base serve timers (seconds)
 const LEVEL_BASE_TIMERS = { 1: 45, 2: 40, 3: 35, 4: 30 };
